@@ -1,0 +1,7 @@
+.create_posts mat-card {
+  margin-top: 1rem;
+}
+
+.create_posts mat-form-field, textarea {
+  width: 100%;
+}

@@ -1,0 +1,17 @@
+<section class="create_posts">
+  <mat-card class="mat-elevation-z3">
+    <form (submit)="onPostAdded(postForm)" #postForm='ngForm'>
+      <mat-form-field>
+        <input name="title" ngModel required minlength="3" #title="ngModel" type="text" matInput
+               placeholder="Post Title"/>
+        <mat-error *ngIf="title.invalid">Please enter a post title</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea name="content" rows="4" matInput required minlength="3" ngModel #content="ngModel"
+                  placeholder="Post Content"></textarea>
+        <mat-error *ngIf="content.invalid">Please enter a post content</mat-error>
+      </mat-form-field>
+      <button color="accent" mat-raised-button type="submit">Save Post</button>
+    </form>
+  </mat-card>
+</section>
