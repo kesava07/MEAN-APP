@@ -1,22 +1,23 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {AppRouterModule} from './app.router.module';
-import {HttpClientModule} from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AppRouterModule } from './app.router.module';
+import { HttpClientModule } from '@angular/common/http';
 import {
   MatInputModule,
   MatCardModule,
   MatButtonModule,
   MatToolbarModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 
-import {AppComponent} from './app.component';
-import {AppPostCreateComponent} from './Posts/post-create/post-create.component';
-import {AppHeaderComponent} from './header/header.component';
-import {PostsListComponent} from './Posts/posts-list/posts-list.component';
+import { AppComponent } from './app.component';
+import { AppPostCreateComponent } from './Posts/post-create/post-create.component';
+import { AppHeaderComponent } from './header/header.component';
+import { PostsListComponent } from './Posts/posts-list/posts-list.component';
 
 
 @NgModule({
@@ -28,13 +29,14 @@ import {PostsListComponent} from './Posts/posts-list/posts-list.component';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
     HttpClientModule,
     AppRouterModule
   ],

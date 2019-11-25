@@ -1,7 +1,7 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Post} from '../post.model';
-import {PostsService} from '../posts.service';
-import {Subscription} from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Post } from '../post.model';
+import { PostsService } from '../posts.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-posts-list',
@@ -10,6 +10,7 @@ import {Subscription} from 'rxjs';
 })
 export class PostsListComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
+  isLoading = false;
 
   private postSubscription: Subscription;
 
@@ -17,11 +18,12 @@ export class PostsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this.postSer.getPosts();
     this.postSubscription = this.postSer.getPostUpdates()
       .subscribe((posts: Post[]) => {
-        console.log(posts);
         this.posts = posts;
+        this.isLoading = false;
       });
   }
 

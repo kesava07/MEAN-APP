@@ -5,3 +5,17 @@
 .create_posts mat-form-field, textarea {
   width: 100%;
 }
+.create_posts mat-spinner{
+  margin: auto;
+}
+input[type='file']{
+  visibility: hidden;
+}
+
+.image_preview{
+  height: 5rem;
+  margin: 1rem 0;
+}
+.image_preview img{
+  height: 100%;
+}

@@ -1,6 +1,29 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../Models/posts');
+const multer = require('multer');
+
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg'
+}
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let error = new Error("Invalid mime type");
+    if (isValid) {
+      error = null
+    }
+    cb(error, "Backend/images")
+  },
+  filename: (req, file, cb) => {
+    const name = file.originalname.toLowerCase().split(' ').join("-");
+    const ext = MIME_TYPE_MAP[file.mimetype];
+    cb(null, name + '-' + Date.now() + '.' + ext);
+  }
+})
 
 router.get("", (req, res) => {
   Post.find().then((documents) => {
@@ -11,25 +34,28 @@ router.get("", (req, res) => {
   });
 });
 
-router.post("", (req, res) => {
+router.post("", multer({ storage: storage }).single('image'), (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
   const post = new Post({
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: url + '/images/' + req.file.filename
   });
   post.save()
     .then((createdPost) => {
       res.status(201).json({
         message: "post added successfully",
-        postId: createdPost._id
+        post: {
+          ...createdPost,
+          id: createdPost._id
+        }
       });
     });
 });
 
 router.delete('/:id', (req, res) => {
-  console.log(req.params.id);
-  Post.deleteOne({_id: req.params.id})
+  Post.deleteOne({ _id: req.params.id })
     .then((response) => {
-      console.log(response)
       res.status(200).json({
         message: "Deleted post"
       })
@@ -42,9 +68,8 @@ router.put('/:id', (req, res) => {
     title: req.body.title,
     content: req.body.content
   });
-  Post.updateOne({_id: req.params.id}, post)
+  Post.updateOne({ _id: req.params.id }, post)
     .then((response) => {
-      console.log(response)
       res.status(200).json({
         message: "Updated successfully"
       })
@@ -57,7 +82,7 @@ router.get('/:id', (req, res) => {
       if (post) {
         res.status(200).json(post)
       } else {
-        res.status(404).json({message: "Post not found"})
+        res.status(404).json({ message: "Post not found" })
       }
     })
 });
