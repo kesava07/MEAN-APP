@@ -1,7 +1,8 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const Post = require('../Models/posts');
-const multer = require('multer');
+
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -26,12 +27,24 @@ const storage = multer.diskStorage({
 })
 
 router.get("", (req, res) => {
-  Post.find().then((documents) => {
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+  let fetchedPosts;
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+  }
+  postQuery.then((documents) => {
+    fetchedPosts = documents
+    return Post.count();
+  }).then(count => {
     res.status(200).json({
       message: "Post sent successfully",
-      posts: documents
+      posts: fetchedPosts,
+      postsCount: count
     });
-  });
+  })
 });
 
 router.post("", multer({ storage: storage }).single('image'), (req, res) => {
@@ -62,11 +75,17 @@ router.delete('/:id', (req, res) => {
     })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', multer({ storage: storage }).single('image'), (req, res) => {
+  let imagePath = req.body.imagePath;
+  if (req.file) {
+    const url = req.protocol + '://' + req.get('host');
+    imagePath = url + '/images/' + req.file.filename
+  }
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: imagePath
   });
   Post.updateOne({ _id: req.params.id }, post)
     .then((response) => {

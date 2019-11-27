@@ -1,0 +1,22 @@
+<section class="app_login">
+    <mat-card class="mat-elevation-z3">
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+        <form (submit)="handleLogin(loginForm)" #loginForm="ngForm">
+            <mat-form-field>
+                <input name="email" type="email" matInput placeholder="Email" ngModel #emailInput="ngModel" required
+                    email />
+                <mat-error *ngIf="emailInput.invalid">
+                    Please enter vaild email
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input name="password" autocomplete type="password" matInput placeholder="Password" ngModel
+                    #passwordInput="ngModel" required />
+                <mat-error *ngIf="passwordInput.invalid">
+                    Please enter valid password
+                </mat-error>
+            </mat-form-field>
+            <button color="accent" mat-raised-button>Login</button>
+        </form>
+    </mat-card>
+</section>

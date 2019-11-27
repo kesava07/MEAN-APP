@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
 
-mongoose.connect("mongodb+srv://kesava07:14NGEVtjf1tmLkWe@cluster0-wx6ar.mongodb.net/node-angular?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://kesava07:14NGEVtjf1tmLkWe@cluster0-wx6ar.mongodb.net/node-angular")
   .then(() => {
     console.log("Connected..!")
   }).catch(() => {
@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/posts', require('./routes/posts'));
+app.use('/api/user', require('./routes/user'));
 
 
 module.exports = app;

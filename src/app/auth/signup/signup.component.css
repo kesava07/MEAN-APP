@@ -1,0 +1,9 @@
+.app_signup mat-card{
+    margin-top: 1rem;
+}
+.app_signup mat-form-field{
+    width: 100%;
+}
+.app_signup mat-spinner{
+    margin: auto;
+}
