@@ -6,9 +6,9 @@ const app = express();
 
 mongoose.connect("mongodb+srv://kesava07:14NGEVtjf1tmLkWe@cluster0-wx6ar.mongodb.net/node-angular")
   .then(() => {
-    console.log("Connected..!")
+    console.log("Connected..!");
   }).catch(() => {
-    console.log("Problem while connecting")
+    console.log("Problem while connecting");
   });
 
 app.use(bodyParser.json());
@@ -18,7 +18,7 @@ app.use('/images', express.static(path.join('Backend/images')));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept");
+    "Origin, X-Requested-With, Content-Type, Accept,Authorization");
   res.setHeader("Access-Control-Allow-Methods",
     "GET, POST, PUT, PATCH, DELETE, OPTIONS");
   next();

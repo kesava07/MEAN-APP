@@ -1,15 +1,17 @@
-import {Component} from '@angular/core';
-import {Post} from './Posts/post.model';
+import { Component, OnInit } from '@angular/core';
+import { Post } from './Posts/post.model';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  storedPosts: Post[] = [];
+export class AppComponent implements OnInit {
 
-  createPosts(post) {
-    this.storedPosts.push(post);
+  constructor(private authService: AuthService) { }
+
+  ngOnInit() {
+    this.authService.autoAuthUser();
   }
 }

@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const Post = require('../Models/posts');
+const checkAuth = require('../middleware/check-auth');
 
 
 const MIME_TYPE_MAP = {
@@ -47,12 +48,13 @@ router.get("", (req, res) => {
   })
 });
 
-router.post("", multer({ storage: storage }).single('image'), (req, res) => {
+router.post("", checkAuth, multer({ storage: storage }).single('image'), (req, res) => {
   const url = req.protocol + '://' + req.get('host');
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
-    imagePath: url + '/images/' + req.file.filename
+    imagePath: url + '/images/' + req.file.filename,
+    creator: req.userData.userId
   });
   post.save()
     .then((createdPost) => {
@@ -66,16 +68,22 @@ router.post("", multer({ storage: storage }).single('image'), (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  Post.deleteOne({ _id: req.params.id })
+router.delete('/:id', checkAuth, (req, res) => {
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId })
     .then((response) => {
-      res.status(200).json({
-        message: "Deleted post"
-      })
+      if (response.n > 0) {
+        res.status(200).json({
+          message: "Deleted post"
+        })
+      } else {
+        res.status(401).json({
+          message: "Not authorized"
+        })
+      }
     })
 });
 
-router.put('/:id', multer({ storage: storage }).single('image'), (req, res) => {
+router.put('/:id', checkAuth, multer({ storage: storage }).single('image'), (req, res) => {
   let imagePath = req.body.imagePath;
   if (req.file) {
     const url = req.protocol + '://' + req.get('host');
@@ -85,13 +93,20 @@ router.put('/:id', multer({ storage: storage }).single('image'), (req, res) => {
     _id: req.body.id,
     title: req.body.title,
     content: req.body.content,
-    imagePath: imagePath
+    imagePath: imagePath,
+    creator: req.userData.userId
   });
-  Post.updateOne({ _id: req.params.id }, post)
+  Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
     .then((response) => {
-      res.status(200).json({
-        message: "Updated successfully"
-      })
+      if (response.nModified > 0) {
+        res.status(200).json({
+          message: "Updated successfully"
+        })
+      } else {
+        res.status(401).json({
+          message: "Not authorized"
+        })
+      }
     })
 });
 

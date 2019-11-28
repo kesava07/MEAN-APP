@@ -30,7 +30,8 @@ export class PostsService {
               title: post.title,
               content: post.content,
               id: post._id,
-              imagePath: post.imagePath
+              imagePath: post.imagePath,
+              creator: post.creator
             };
           }),
           postsCount: postsData.postsCount
@@ -54,7 +55,7 @@ export class PostsService {
     postData.append('content', content);
     postData.append('image', image, title);
     this.http.post<{ message: string, post: Post }>('http://localhost:3000/api/posts', postData)
-      .subscribe((data) => {
+      .subscribe(() => {
         // const post: Post = {
         //   id: data.post.id,
         //   title: title,
@@ -68,7 +69,7 @@ export class PostsService {
   }
 
   getEditingPost(postId) {
-    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(`http://localhost:3000/api/posts/${postId}`);
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string, creator: string }>(`http://localhost:3000/api/posts/${postId}`);
   }
 
   deletePost(postId) {
@@ -94,7 +95,8 @@ export class PostsService {
         id: id,
         title: title,
         content: content,
-        imagePath: image
+        imagePath: image,
+        creator: null
       }
     }
     this.http.put(`http://localhost:3000/api/posts/${id}`, postData)

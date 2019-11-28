@@ -2,14 +2,17 @@
   <span> <a routerLink="/">Dev Posts</a> </span>
   <span class="spacer"></span>
   <ul>
-    <li>
-      <a mat-button routerLink="/create">Create</a>
+    <li *ngIf="userAuthenticated">
+      <a mat-button routerLink="/create">New Post</a>
     </li>
-    <li>
+    <li *ngIf="!userAuthenticated">
       <a mat-button routerLink="/login">Login</a>
     </li>
-    <li>
-        <a mat-button routerLink="/signup">Signup</a>
-      </li>
+    <li *ngIf="!userAuthenticated">
+      <a mat-button routerLink="/signup">Signup</a>
+    </li>
+    <li *ngIf="userAuthenticated">
+      <button mat-button (click)="onLogout()">Logout</button>
+    </li>
   </ul>
 </mat-toolbar>

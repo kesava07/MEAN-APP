@@ -1,7 +1,7 @@
 <section class="app_login">
     <mat-card class="mat-elevation-z3">
         <mat-spinner *ngIf="isLoading"></mat-spinner>
-        <form (submit)="handleLogin(loginForm)" #loginForm="ngForm">
+        <form (submit)="handleLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading">
             <mat-form-field>
                 <input name="email" type="email" matInput placeholder="Email" ngModel #emailInput="ngModel" required
                     email />
