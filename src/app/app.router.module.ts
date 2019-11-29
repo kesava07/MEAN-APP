@@ -11,7 +11,8 @@ const routes = [
   { path: 'create', component: AppPostCreateComponent, canActivate: [AuthGuard] },
   { path: 'edit/:postId', component: AppPostCreateComponent, canActivate: [AuthGuard] },
   { path: 'login', component: AppLoginComponent },
-  { path: 'signup', component: AppSignupComponent }
+  { path: 'signup', component: AppSignupComponent },
+  { path: '**', component: PostsListComponent ,redirectTo:'' }
 ];
 
 @NgModule({
